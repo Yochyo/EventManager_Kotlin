@@ -14,6 +14,8 @@ abstract class EventHandler<E: Event>{
         return listener
     }
     fun removeListener(l: Listener<E>) = listeners.remove(l)
+    fun removeAllListeners() = listeners.clear()
+
     fun trigger(e: E) {
         for (l in listeners) {
             l.onEvent(e)
@@ -21,7 +23,6 @@ abstract class EventHandler<E: Event>{
                 return
         }
     }
-
 }
 
 interface Event {
