@@ -1,5 +1,5 @@
 package de.yochyo.eventmanager
 
-interface Listener {
-    fun onEvent(e: Event)
+interface Listener<T: Event> {
+    fun onEvent(e: T)
 }
