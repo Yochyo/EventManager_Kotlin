@@ -21,7 +21,7 @@ class SampleEvent: Event, Cancelable{
 
     companion object: EventHandler<SampleEvent>(){
         override fun doAfter(e: SampleEvent){
-            ..do this after every listener was used..
+            //do this after every listener was used
         }
     }
 }
