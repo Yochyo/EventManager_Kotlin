@@ -19,7 +19,11 @@ fun main(args: Array<String>){
 class SampleEvent: Event, Cancelable{
     override var isCanceled = false
 
-    companion object: EventHandler<SampleEvent>()
+    companion object: EventHandler<SampleEvent>(){
+        override fun doAfter(e: SampleEvent){
+            ..do this after every listener was used..
+        }
+    }
 }
 
 object SampleListener: Listener<SampleEvent>{

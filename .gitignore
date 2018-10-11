@@ -2,3 +2,4 @@
 /target/
 /out/
 *.iml
+src/main/java/de/yochyo/eventmanager/Test.kt

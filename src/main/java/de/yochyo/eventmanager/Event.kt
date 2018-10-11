@@ -22,7 +22,9 @@ abstract class EventHandler<E: Event>{
             if (this is Cancelable && this.isCanceled)
                 return
         }
+        doAfter(e)
     }
+    abstract fun doAfter(e: E)
 }
 
 interface Event {
