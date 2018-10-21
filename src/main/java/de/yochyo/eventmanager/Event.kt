@@ -11,6 +11,7 @@ abstract class EventHandler<E: Event>{
                 l(e)
             }
         }
+        registerListener(listener)
         return listener
     }
     fun removeListener(l: Listener<E>) = listeners.remove(l)
