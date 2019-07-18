@@ -1,14 +1,23 @@
 package de.yochyo.eventmanager
 
-import kotlin.collections.ArrayList
+import java.util.*
 
 abstract class EventHandler<E: Event>{
-    val listeners = ArrayList<Listener<E>>()
+    private val listeners = LinkedList<Listener<E>>()
     fun registerListener(l: Listener<E>) = listeners.add(l)
-    fun registerListener(l: (e: E)->Unit): Listener<E>{
+    fun registerListener(l: (e: E)->Boolean): Listener<E>{
         val listener = object : Listener<E> {
-            override fun onEvent(e: E) {
-                l(e)
+            override fun onEvent(e: E): Boolean {
+                return l(e)
+            }
+        }
+        registerListener(listener)
+        return listener
+    }
+    fun registerSingleUseListener(l: (e: E)->Boolean): Listener<E>{
+        val listener = object : SingleUseListener<E> {
+            override fun onEvent(e: E): Boolean {
+                return l(e)
             }
         }
         registerListener(listener)
@@ -18,14 +27,15 @@ abstract class EventHandler<E: Event>{
     fun removeAllListeners() = listeners.clear()
 
     fun trigger(e: E) {
-        for (l in listeners) {
-            l.onEvent(e)
-            if (this is Cancelable && this.isCanceled)
-                return
+        val iter = listeners.iterator()
+        while(iter.hasNext()){
+            val next = iter.next()
+            val result = next.onEvent(e)
+            if(next is SingleUseListener && result)
+                iter.remove()
+            if(result) break
         }
-        doAfter(e)
     }
-    abstract fun doAfter(e: E)
 }
 
 interface Event {
