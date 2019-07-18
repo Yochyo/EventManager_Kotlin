@@ -33,7 +33,6 @@ abstract class EventHandler<E: Event>{
             val result = next.onEvent(e)
             if(next is SingleUseListener && result)
                 iter.remove()
-            if(result) break
         }
     }
 }
