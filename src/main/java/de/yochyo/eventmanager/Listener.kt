@@ -1,5 +1,17 @@
 package de.yochyo.eventmanager
 
-interface Listener<T: Event> {
-    fun onEvent(e: T): Boolean
+abstract class Listener<T: Event>(val priority: Int = NORMAL): Comparable<Listener<T>> {
+    companion object{
+        const val HIGHEST = 0
+        const val HIGHER = 1
+        const val HIGH = 2
+        const val NORMAL = 3
+        const val LOW = 4
+        const val LOWER = 5
+        const val LOWEST = 6
+    }
+
+    override fun compareTo(other: Listener<T>) = priority.compareTo(other.priority)
+
+    abstract fun onEvent(e: T)
 }

@@ -3,7 +3,7 @@ package de.yochyo.eventmanager
 import java.util.function.Predicate
 
 
-class EventCollection<T>(private val c: MutableCollection<T>, val onUpdate: (collection: Collection<T>) -> Unit = {}) : MutableCollection<T> {
+class EventCollection<T>(private val c: MutableCollection<T>, var onUpdate: (collection: Collection<T>) -> Unit = {}) : MutableCollection<T> {
 
     init {
         notifyChange()
