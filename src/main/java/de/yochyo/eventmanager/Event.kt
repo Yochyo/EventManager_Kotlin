@@ -2,7 +2,7 @@ package de.yochyo.eventmanager
 
 import java.util.*
 
-abstract class EventHandler<E: Event>{
+open class EventHandler<E: Event>{
     private val listeners = LinkedList<Listener<E>>()
     fun registerListener(l: Listener<E>){
         val res = listeners.add(l)
@@ -19,7 +19,7 @@ abstract class EventHandler<E: Event>{
     fun removeListener(l: Listener<E>) = listeners.remove(l)
     fun removeAllListeners() = listeners.clear()
 
-    fun trigger(e: E) {
+    open fun trigger(e: E) {
         val iter = listeners.iterator()
         while(iter.hasNext() && !e.isCanceled){
             iter.next().onEvent(e)
@@ -33,7 +33,7 @@ abstract class EventHandler<E: Event>{
 }
 
 abstract class Event {
-    val name: String
+    open val name: String
         get() = this::class.java.simpleName!!
     var isCanceled = false
     var deleteListener = false
