@@ -3,7 +3,7 @@ package de.yochyo.eventmanager
 import java.util.function.Predicate
 
 
-class EventCollection<T>(private val c: MutableCollection<T>) : MutableCollection<T> {
+open class EventCollection<T>(private val c: MutableCollection<T>) : MutableCollection<T> {
     val onUpdate = object: EventHandler<OnUpdateEvent>(){}
     val onClear = object: EventHandler<OnClearEvent>(){
         override fun trigger(e: EventCollection<T>.OnClearEvent) {
