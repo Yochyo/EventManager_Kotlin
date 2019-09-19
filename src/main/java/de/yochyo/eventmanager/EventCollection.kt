@@ -98,7 +98,7 @@ class EventCollection<T>(private val c: MutableCollection<T>) : MutableCollectio
 
     inner class OnUpdateEvent(val collection: Collection<T>): Event()
     inner class OnClearEvent(val collection: Collection<T>): Event()
-    inner class OnAddElementEvent(val collection: Collection<T>,val  e: T): Event()
+    inner class OnAddElementEvent(val collection: Collection<T>,val  element: T): Event()
     inner class OnAddElementsEvent(val collection: Collection<T>,val  elements: Collection<T>): Event()
-    inner class OnRemoveElementEvent(val collection: Collection<T>,val  e: T): Event()
+    inner class OnRemoveElementEvent(val collection: Collection<T>,val  element: T): Event()
 }
