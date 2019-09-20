@@ -105,9 +105,11 @@ open class EventCollection<T>(private val c: MutableCollection<T>) : MutableColl
         return removed
     }
 
-    override fun iterator() = c.iterator()
-    override fun parallelStream() = c.parallelStream()
 
+    override fun iterator() = c.iterator()
+    @Deprecated("Will not trigger events")
+    override fun parallelStream() = c.parallelStream()
+    @Deprecated("Will not trigger events")
     override fun spliterator() = c.spliterator()
 
     inner class OnUpdateEvent(val collection: Collection<T>) : Event()
