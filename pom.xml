@@ -6,7 +6,7 @@
 
     <groupId>de.yochyo.eventmanager</groupId>
     <artifactId>EventManager</artifactId>
-    <version>1.22</version>
+    <version>1.23</version>
 
     <properties>
         <kotlin.version>1.3.40</kotlin.version>

@@ -3,10 +3,13 @@ package de.yochyo.eventmanager
 import java.util.*
 
 open class EventHandler<E: Event>{
+    private val lock = Any()
     private val listeners = LinkedList<Listener<E>>()
     fun registerListener(l: Listener<E>){
-        val res = listeners.add(l)
-        listeners.sortBy { it }
+        synchronized(lock){
+            val res = listeners.add(l)
+            listeners.sortBy { it }
+        }
     }
     fun registerListener(l: (e: E)->Unit): Listener<E>{
         val listener = object : Listener<E>() {
@@ -16,20 +19,21 @@ open class EventHandler<E: Event>{
         return listener
     }
 
-    fun removeListener(l: Listener<E>) = listeners.remove(l)
-    fun removeAllListeners() = listeners.clear()
+    fun removeListener(l: Listener<E>) = synchronized(lock){listeners.remove(l)}
+    fun removeAllListeners() = synchronized(lock){listeners.clear()}
 
     open fun trigger(e: E) {
-        val iter = listeners.iterator()
-        while(iter.hasNext() && !e.isCanceled){
-            iter.next().onEvent(e)
-            if(e.deleteListener){
-                e.deleteListener = false
-                iter.remove()
+        synchronized(lock){
+            val iter = listeners.iterator()
+            while(iter.hasNext() && !e.isCanceled){
+                iter.next().onEvent(e)
+                if(e.deleteListener){
+                    e.deleteListener = false
+                    iter.remove()
+                }
             }
         }
     }
-
 }
 
 abstract class Event {
