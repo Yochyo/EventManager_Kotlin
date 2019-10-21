@@ -11,7 +11,7 @@ open class EventHandler<E: Event>{
             listeners.sortBy { it }
         }
     }
-    fun registerListener(l: (e: E)->Unit): Listener<E>{
+    fun registerListener(priority: Int = Listener.NORMAL, l: (e: E)->Unit): Listener<E>{
         val listener = object : Listener<E>() {
             override fun onEvent(e: E) = l(e)
         }
