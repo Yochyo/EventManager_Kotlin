@@ -17,12 +17,6 @@ open class EventCollection<T>(private val c: MutableCollection<T>) : MutableColl
             notifyChange()
         }
     }
-    val onAddElements = object : EventHandler<OnAddElementsEvent>() {
-        override fun trigger(e: EventCollection<T>.OnAddElementsEvent) {
-            super.trigger(e)
-            notifyChange()
-        }
-    }
     val onRemoveElement = object : EventHandler<OnRemoveElementEvent>() {
         override fun trigger(e: EventCollection<T>.OnRemoveElementEvent) {
             super.trigger(e)
@@ -52,9 +46,8 @@ open class EventCollection<T>(private val c: MutableCollection<T>) : MutableColl
     }
 
     override fun addAll(e: Collection<T>): Boolean {
-        val res = c.addAll(e)
-        if (res)
-            onAddElements.trigger(OnAddElementsEvent(c, e))
+        var res = false
+        for(element in e) if(add(element)) res = true
         return res
     }
 
@@ -72,8 +65,7 @@ open class EventCollection<T>(private val c: MutableCollection<T>) : MutableColl
 
     override fun removeAll(elements: Collection<T>): Boolean {
         var removed = false
-        for (e in elements)
-            if (remove(e)) removed = true
+        for (e in elements) if (remove(e)) removed = true
         return removed
     }
 
@@ -94,9 +86,9 @@ open class EventCollection<T>(private val c: MutableCollection<T>) : MutableColl
     override fun retainAll(elements: Collection<T>): Boolean {
         val iter = c.iterator()
         var removed = false
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             val current = iter.next()
-            if(!elements.contains(current)){
+            if (!elements.contains(current)) {
                 iter.remove()
                 onRemoveElement.trigger(OnRemoveElementEvent(c, current))
                 removed = true
@@ -109,12 +101,12 @@ open class EventCollection<T>(private val c: MutableCollection<T>) : MutableColl
     override fun iterator() = c.iterator()
     @Deprecated("Will not trigger events")
     override fun parallelStream() = c.parallelStream()
+
     @Deprecated("Will not trigger events")
     override fun spliterator() = c.spliterator()
 
     inner class OnUpdateEvent(val collection: Collection<T>) : Event()
     inner class OnClearEvent(val collection: Collection<T>) : Event()
     inner class OnAddElementEvent(val collection: Collection<T>, val element: T) : Event()
-    inner class OnAddElementsEvent(val collection: Collection<T>, val elements: Collection<T>) : Event()
     inner class OnRemoveElementEvent(val collection: Collection<T>, val element: T) : Event()
 }
