@@ -18,7 +18,7 @@ abstract class Listener<T: Event>(val priority: Int = NORMAL): Comparable<Listen
         }
     }
 
-    override fun compareTo(other: Listener<T>) = priority.compareTo(other.priority)
-
     abstract fun onEvent(e: T)
+
+    override fun compareTo(other: Listener<T>) = priority.compareTo(other.priority)
 }
