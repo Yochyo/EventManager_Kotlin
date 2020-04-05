@@ -10,7 +10,7 @@ open class NonBlockingEventHandler<E : Event> {
     }
 
     fun registerListener(priority: Int = Listener.NORMAL, l: (e: E) -> Unit): Listener<E> {
-        val listener = object : Listener<E>() {
+        val listener = object : Listener<E>(priority) {
             override fun onEvent(e: E) = l(e)
         }
         registerListener(listener)

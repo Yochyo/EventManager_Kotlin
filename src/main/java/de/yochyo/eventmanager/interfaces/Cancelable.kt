@@ -1,5 +1,5 @@
 package de.yochyo.eventmanager.interfaces
 
 interface Cancelable {
-    var canceled: Boolean
+    var isCanceled: Boolean
 }
