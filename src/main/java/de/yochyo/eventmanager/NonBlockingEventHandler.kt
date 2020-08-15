@@ -18,7 +18,11 @@ open class NonBlockingEventHandler<E : Event> {
     }
 
     open fun removeListener(l: Listener<E>) = listeners.remove(l)
-    open fun removeAllListeners() = listeners.clear()
+    open fun removeAllListeners(): List<Listener<E>>{
+        val res = listeners.clone() as List<Listener<E>>
+        listeners.clear()
+        return res
+    }
 
     open fun trigger(e: E) {
         val iter = listeners.iterator()
