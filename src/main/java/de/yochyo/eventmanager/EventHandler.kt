@@ -13,11 +13,12 @@ open class EventHandler<E : Event>: MutableList<Listener<E>> by LinkedList(){
      * after the event was proceeded.
      * Do not use add() if you want to add a listener while an event is being triggered
      */
-    open fun registerListener(l: Listener<E>) {
+    open fun registerListener(l: Listener<E>): Listener<E> {
         synchronized(locked) {
             if (!locked) add(l)
             else doAfterUnlock.add { add(l) }
         }
+        return l
     }
 
     /**
