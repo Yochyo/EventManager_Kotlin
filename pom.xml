@@ -6,7 +6,7 @@
 
     <groupId>de.yochyo.eventmanager</groupId>
     <artifactId>EventManager</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
 
     <dependencies>
         <dependency>
