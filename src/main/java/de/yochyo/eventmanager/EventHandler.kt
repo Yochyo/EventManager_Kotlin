@@ -1,9 +1,35 @@
 package de.yochyo.eventmanager
 
-open class EventHandler<E : Event> : NonBlockingEventHandler<E>() {
-    protected val lock = Any()
-    override fun registerListener(l: Listener<E>) = synchronized(lock) { super.registerListener(l) }
-    override fun removeAllListeners() = synchronized(lock) { super.removeAllListeners() }
-    override fun removeListener(l: Listener<E>) = synchronized(lock) { super.removeListener(l) }
-    override fun trigger(e: E) = synchronized(lock) { super.trigger(e) }
+import java.util.*
+
+open class EventHandler<E : Event> {
+    private val listeners = LinkedList<Listener<E>>()
+
+    open fun registerListener(l: Listener<E>) {
+        listeners.add(l)
+    }
+
+    open fun registerListener(l: (e: E) -> Unit): Listener<E> {
+        val listener = Listener<E> { l(it) }
+        registerListener(listener)
+        return listener
+    }
+
+    open fun removeListener(l: Listener<E>) = listeners.remove(l)
+    open fun removeAllListeners(): List<Listener<E>> {
+        val res = listeners.clone() as List<Listener<E>>
+        listeners.clear()
+        return res
+    }
+
+    open fun trigger(e: E) {
+        val iter = listeners.iterator()
+        while (iter.hasNext()) {
+            iter.next().onEvent(e)
+            if (e.deleteListener) {
+                e.deleteListener = false
+                iter.remove()
+            }
+        }
+    }
 }
